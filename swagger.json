@@ -1,0 +1,155 @@
+{
+    "openapi": "3.0.0",
+    "info": {
+        "title": "TodoList API",
+        "description": "API para gerenciar Tarefas",
+        "version": "1.0.0"
+    },
+    "paths": {
+        "/todos": {
+            "get": {
+                "tags": ["Todos"],
+                "summary": "Obter todas as tarefas",
+                "responses": {
+                    "200": {
+                        "description": "Retorna uma lista de tarefas",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "array",
+                                    "items": {
+                                        "$ref": "#/components/schemas/Todo"
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            },
+            "post": {
+                "tags": ["Todos"],
+                "summary": "Adicionar uma tarefa",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/TodoInput"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "201": {
+                        "description": "Tarefa criada com sucesso"
+                    },
+                    "500": {
+                        "description": "Erro interno do servidor"
+                    }
+                }
+            }
+        },
+        "/todos/{id}": {
+            "put": {
+                "tags": ["Todos"],
+                "summary": "Atualizar uma tarefa existente",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "required": true,
+                        "description": "ID da tarefa a ser atualizada",
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/TodoInput"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Tarefa atualizada com sucesso"
+                    },
+                    "404": {
+                        "description": "Tarefa não encontrada"
+                    },
+                    "500": {
+                        "description": "Erro interno do servidor"
+                    }
+                }
+            },
+            "delete": {
+                "tags": ["Todos"],
+                "summary": "Remover uma tarefa",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "required": true,
+                        "description": "ID da tarefa a ser removida",
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Tarefa removida com sucesso"
+                    },
+                    "404": {
+                        "description": "A tarefa não foi encontrada"
+                    },
+                    "500": {
+                        "description": "Não foi possível remover a tarefa"
+                    }
+                }
+            }
+        }
+    },
+    "components": {
+        "schemas": {
+            "Todo": {
+                "type": "object",
+                "properties": {
+                    "id": {
+                        "type": "integer",
+                        "description": "ID da tarefa"
+                    },
+                    "text": {
+                        "type": "string",
+                        "description": "Texto da tarefa"
+                    },
+                    "completed": {
+                        "type": "boolean",
+                        "description": "Status de conclusão da tarefa"
+                    }
+                }
+            },
+            "TodoInput": {
+                "type": "object",
+                "required": [
+                    "text",
+                    "completed"
+                ],
+                "properties": {
+                    "text": {
+                        "type": "string",
+                        "description": "Texto da tarefa"
+                    },
+                    "completed": {
+                        "type": "boolean",
+                        "description": "Status de conclusão da tarefa"
+                    }
+                }
+            }
+        }
+    }
+}
