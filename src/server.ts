@@ -58,6 +58,30 @@ app.delete("/todos/:id", async (req, res) => {
     res.status(200).send()
 });
 
+app.put("/todos/:id", async (req, res) => {
+    const id = Number(req.params.id)
+
+    try {
+        const todo = await prisma.todo.findUnique({
+            where: { id }
+        })
+
+        if (!todo) {
+            return res.status(404).send({ message: "Tarefa não encontrada" })
+        }
+
+        const data = { ...req.body }
+
+        await prisma.todo.update({
+            where: { id },
+            data 
+        })
+    } catch (error) {
+        return res.status(500).send({ message: "Falha ao atualizar a tarefa" })
+    }
+    res.status(200).send()
+})
+
 app.listen(port, () => {
   console.log(`Servidor em execução em http://localhost:${port}`);
 });
